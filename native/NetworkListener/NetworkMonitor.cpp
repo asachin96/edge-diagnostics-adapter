@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 #include "NetworkMonitor.h"
 #include "HttpListener.h"
 #include <string>
@@ -33,7 +33,8 @@ int NetworkProxyLibrary::NetworkMonitor::StartListeningEdgeProcess(std::function
         return 1;
     }
 
-    const wchar_t* edgeName = L"EdgeCP";
+    const wchar_t* wwaName = L"EdgeCP";
+    const wchar_t* edgeName = L"WWAHost";
     ProcessDiagnosticInfo^ edgeProcessInfo = nullptr;
     IVectorView<ProcessDiagnosticInfo^>^ processes = ProcessDiagnosticInfo::GetForProcesses();
 
@@ -41,7 +42,7 @@ int NetworkProxyLibrary::NetworkMonitor::StartListeningEdgeProcess(std::function
     {
         const wchar_t* name = info->ExecutableFileName->Data();
 
-        if (info->ProcessId == _processId && std::wcsstr(name, edgeName) != nullptr)
+        if (info->ProcessId == _processId && (std::wcsstr(name, edgeName) != nullptr || std::wcsstr(name, wwaName) != nullptr))
         {
             edgeProcessInfo = info;
             break;
